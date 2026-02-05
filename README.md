@@ -47,13 +47,17 @@ Durable Object
 ### 1. Scaffold the project
 
 ```bash
-pnpm create cloudflare@latest --template=jillesme/tanstack-drizzle-d1-durable-object-starter
+$ npm create cloudflare@latest -- --template=jillesme/tanstack-drizzle-d1-durable-object-starter
+# or pnpm
+$ pnpm create cloudflare@latest --template=jillesme/tanstack-drizzle-d1-durable-object-starter
 ```
 
 ### 2. Create a D1 database
 
-```bash
-npx wrangler d1 create my-app-db
+```bash 
+$ npx wrangler d1 create my-app-db
+# or pnpm
+$ pnpm dlx wrangler d1 create my-app-db
 ```
 
 Wrangler will output your database details:
@@ -95,12 +99,31 @@ Open `wrangler.jsonc` and replace the placeholder `database_name` and `database_
 
 ### 4. Install & run
 
+Run migrations locally 
+
 ```bash
-pnpm install
-pnpm dev
+$ pnpm run db:migrate
+igrations to be applied:
+┌──────────────────────┐
+│ name                 │
+├──────────────────────┤
+│ 0000_brave_mongu.sql │
+└──────────────────────┘
+✔ About to apply 1 migration(s)
+Your database may not be available to serve requests during the migration, continue? … yes
+🌀 Executing on local database DB (9dd1428b-60f7-4bf3-b373-699227a36538) from .wrangler/state/v3/d1:
+🌀 To execute on your remote database, add a --remote flag to your wrangler command.
+🚣 2 commands executed successfully.
+┌──────────────────────┬────────┐
+│ name                 │ status │
+├──────────────────────┼────────┤
+│ 0000_brave_mongu.sql │ ✅     │
+└──────────────────────┴────────┘
+$ pnpm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) and navigate to the **Counter** page. Open it in multiple tabs to see real-time WebSocket sync.
+Or go to any routes and insert data.
 
 ### 5. Deploy
 
