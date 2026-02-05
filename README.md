@@ -6,7 +6,7 @@ A full-stack starter template combining [TanStack Start](https://tanstack.com/st
 
 - **TanStack Start** — Full-stack React framework with file-based routing, server functions, SSR, and API routes
 - **Cloudflare Durable Objects** — Stateful, single-threaded objects with built-in SQLite storage
-- **Drizzle ORM** — Type-safe SQL queries running inside the Durable Object with auto-migrations
+- **Drizzle ORM** — Type-safe SQL queries for both D1 (shared database) and Durable Object SQLite, with generated migrations
 - **WebSocket Hibernation API** — Real-time cross-tab sync with cost-efficient hibernatable WebSockets
 - **RPC Methods** — Call Durable Object methods directly from server functions (no fetch-based routing)
 - **Tailwind CSS v4** — Utility-first styling
@@ -16,11 +16,12 @@ A full-stack starter template combining [TanStack Start](https://tanstack.com/st
 ```
 Browser ──► Worker (src/server.ts)
               ├── TanStack Start handler (routes, server functions, SSR)
+              ├── D1 database (via Drizzle ORM — shared across all requests)
               ├── WebSocket upgrade ──► Durable Object (src/durable-object.ts)
               └── Server functions ──► Durable Object (via RPC)
 
 Durable Object
-  ├── SQLite storage (via Drizzle ORM)
+  ├── SQLite storage (via Drizzle ORM — per-object instance)
   ├── RPC methods: getCount(), increment(), decrement()
   └── WebSocket Hibernation API (broadcast updates to connected clients)
 ```
@@ -32,8 +33,11 @@ Durable Object
 | `src/server.ts` | Worker entry point — intercepts WebSocket upgrades, delegates to TanStack |
 | `src/durable-object.ts` | Durable Object class with Drizzle, RPC methods, and WebSocket handlers |
 | `src/routes/counter/$id.tsx` | Counter page — server functions, WebSocket client, optimistic UI |
+| `src/db/schema.ts` | Drizzle schema for the D1 database |
 | `src/db/do-schema.ts` | Drizzle schema for the DO's SQLite database |
-| `drizzle/do-migrations/` | Generated migrations applied inside the DO on startup |
+| `drizzle.config.ts` | Drizzle Kit config for D1 migration generation |
+| `drizzle/migrations/` | Generated D1 migrations applied via Wrangler |
+| `drizzle/do-migrations/` | Generated DO migrations applied inside the DO on startup |
 | `wrangler.jsonc` | Cloudflare Worker + Durable Object configuration |
 
 ## Use This Template
